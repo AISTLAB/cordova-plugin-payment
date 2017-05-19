@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="cordova-plugin-payment" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>payment</name>
+    <preference name="WX_APP_ID"/>
+    <js-module name="payment" src="www/payment.js">
+        <clobbers target="cordova.plugin.payment"/>
+    </js-module>
+    <!-- android -->
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="payment">
+                <param name="ios-package" value="payment"/>
+            </feature>
+        </config-file>
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+            <array>
+                <dict>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>$WX_APP_ID</string>
+                    </array>
+                </dict>
+            </array>
+        </config-file>
+        
+        <!-- common dependence -->
+        <framework src="Security.framework"/>
+        <framework src="libz.dylib"/>
+        <framework src="libsqlite3.0.dylib"/>
+        <framework src="SystemConfiguration.framework"/>
+        <framework src="libstdc++.6.dylib"/>
+        <framework src="CFNetwork.framework"/>
+        <framework src="CoreTelephony.framework"/>
+        <framework src="CoreMotion.framework"/>
+
+        <!-- wxpay dependence -->
+        <header-file src="libs/ios/wxpay/WXApi.h"/>
+        <header-file src="libs/ios/wxpay/WXApiObject.h"/>
+        <source-file src="libs/ios/wxpay/libWeChatSDK.a" framework="true"/>
+
+        <!-- wft dependence -->
+        <header-file src="libs/ios/wft/include/NSDictionary+SPayUtilsExtras.h"/>
+        <header-file src="libs/ios/wft/include/NSString+SPayUtilsExtras.h"/>
+        <header-file src="libs/ios/wft/include/SPayClient.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientAlipayConfigModel.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientConstEnum.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientHeaders.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientPayAppPayManager.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientPayDetailModel.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientPayHelpModel.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientPayStateModel.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientPaySuccessDetailModel.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientPaySuccessModel.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientQQConfigModel.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientReverseScanPayDetailModel.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientWapPayDetailModel.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientWechatConfigModel.h"/>
+        <header-file src="libs/ios/wft/include/SPayClientXMLWriter.h"/>
+        <header-file src="libs/ios/wft/include/SPBaseModel.h"/>
+        <source-file src="libs/ios/wft/libSPaySDK.a" framework="true"/>
+
+        <!-- source code -->
+        <source-file src="src/ios/Payment.m"/>
+    </platform>
+</plugin>
