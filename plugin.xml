@@ -7,7 +7,24 @@
         <clobbers target="cordova.plugin.payment"/>
     </js-module>
     <!-- android -->
-
+     <platform name="android">
+        <!-- package path -->
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="PaymentPlugin">
+                <param name="android-package" value="com.aiesst.payment.PaymentPlugin" />
+            </feature>
+        </config-file>
+        <!-- android permission description -->
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        </config-file>
+        <!-- file path description-->
+        <source-file src="src/android/PaymentPlugin.java" target-dir="src/com/aiesst/payment/" />
+        <source-file src="src/android/libs/wftsdk5.0.jar"  target-dir="libs"/>
+        <source-file src="src/android/libs/libammsdk.jar" target-dir="libs"/>
+    </platform
     <!-- ios -->
     <platform name="ios">
         <config-file parent="/*" target="config.xml">
