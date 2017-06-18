@@ -22,9 +22,23 @@
         </config-file>
         <!-- file path description-->
         <source-file src="src/android/PaymentPlugin.java" target-dir="src/com/aiesst/payment/" />
-        <source-file src="src/android/libs/wftsdk5.0.jar"  target-dir="libs"/>
-        <source-file src="src/android/libs/libammsdk.jar" target-dir="libs"/>
-    </platform
+        <source-file src="libs/android/wftsdk5.0.jar"  target-dir="libs"/>
+        <source-file src="libs/android/libammsdk.jar" target-dir="libs"/>
+        <!-- 微信回调页面，需要根据实际工程id进行设置 -->
+        <source-file src="libs/android/WXPayEntryActivity.java" target-dir="src/com/aiesst/pay/wxapi/" />
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="$WX_APP_ID"/>
+            </intent-filter>
+            </activity>
+        </config-file>
+    </platform>
     <!-- ios -->
     <platform name="ios">
         <config-file parent="/*" target="config.xml">

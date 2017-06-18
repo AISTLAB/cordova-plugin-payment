@@ -23,29 +23,9 @@ import java.util.Map;
 
 public class PaymentPlugin extends CordovaPlugin {
 
-    //支付方式-> 苹果支付，威富通支付方式
-    private enum PayMethod {
-        applePay("applePay"),
-        swiftPay("doSwiftPay");
-        private final String method;
-
-        PayMethod(String method) {
-            this.method = method;
-        }
-    }
-
-    //威富通支付渠道->微信支付，阿里支付
-    private enum SwiftPayChannel {
-        wxPay("wxPay"),
-        aliPay("aliPay");
-        private final String method;
-
-        SwiftPayChannel(String method) {
-            this.method = method;
-        }
-
-    }
-
+    // 支付接口
+    private static final String PAY_METHOD_WFT = "doWithWft";
+    private static final String PAY_METHOD_APPLE_PAY = "doWithApplePay";
 
     @Override
     public boolean execute(String action, JSONArray rawArgs, CallbackContext callbackContext) throws JSONException {
@@ -59,63 +39,47 @@ public class PaymentPlugin extends CordovaPlugin {
             return false;
         }
 
-        if (action.toUpperCase().equals(PayMethod.swiftPay.name().toUpperCase())) {
-            return this.doSwiftPay(mapParams, callbackContext);
-        } else if (action.toUpperCase().equals(PayMethod.applePay.name().toUpperCase())) {
-            return doApplePay(mapParams, callbackContext);
+        if(action.equals(PAY_METHOD_WFT)) {
+            if (doWithWft(mapParams, callbackContext)) {
+                callbackContext.success();
+                return true;
+            } else {
+                callbackContext.error("Unsupported Channel");
+                return false;
+            }
+        } else if(action.equals(PAY_METHOD_APPLE_PAY)) {
+            callbackContext.error("Android doesn't support apple pay!");
+            return false;
         }
+
         callbackContext.error("支付方式有误");
         return false;
     }
 
     /**
-     * 威富通支付
-     *
-     * @param mapParams       支付参数
+     * 威富通支付（服务器版本）
+     * @param mapParams 支付参数
      * @param callbackContext 回调
-     * @return
+     * @return 结果
      */
-    private boolean doSwiftPay(Map<String, String> mapParams, CallbackContext callbackContext) {
-        //支付token
-        String tokenId = mapParams.get("tokenId");
-        if (isNullOrEmpty(tokenId)) {
-            callbackContext.error("tokenId 有误");
-            return false;
-        }
-        //支付渠道
-        String channel = mapParams.get("channel");
+    private boolean doWithWft(Map<String, String> mapParams, CallbackContext callbackContext) {
+
+        String tokenId = mapParams.get("token_id");
+        String service = mapParams.get("service");
+        String appId = mapParams.get("app_id");
         RequestMsg msg = new RequestMsg();
         msg.setTokenId(tokenId);
-        //微信支付
-        if (channel.toUpperCase().equals(SwiftPayChannel.wxPay.name().toUpperCase())) {
-            msg.setTradeType(MainApplication.WX_APP_TYPE);
-            //微信需要AppId
-            String appId = mapParams.get("appId");
-            if (isNullOrEmpty(appId)) {
-                callbackContext.error("微信AppId 有误");
-                return false;
-            }
-            msg.setAppId(appId);
-            //支付宝支付
-        } else if (channel.toUpperCase().equals(SwiftPayChannel.aliPay.name().toUpperCase())) {
-            msg.setTradeType(MainApplication.ZFB_APP_TYPE);
+        msg.setTradeType(service);
+        msg.setAppId(appId);
+
+        if(service.equals(MainApplication.PAY_NEW_ZFB_WAP)) {
+            PayPlugin.unifiedH5Pay(cordova.getActivity(), msg);
+        } else if(service.equals(MainApplication.WX_APP_TYPE)) {
+            PayPlugin.unifiedAppPay(cordova.getActivity(), msg);
         } else {
-            callbackContext.error("威富通支付渠道channel有误");
             return false;
         }
-        //发起支付
-        PayPlugin.unifiedAppPay(cordova.getActivity(), msg);
         return true;
-    }
-
-    /**
-     * 苹果支付
-     * @param mapParams
-     * @param callbackContext
-     * @return
-     */
-    private boolean doApplePay(Map<String, String> mapParams, CallbackContext callbackContext) {
-        return false;
     }
 
     /**

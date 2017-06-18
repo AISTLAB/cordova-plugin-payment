@@ -25,7 +25,7 @@
 
  @param command 传入参数 example: {"token_id": "<token_id>", "services": <services>, "amount": <amount>}
  */
-- (void) exeWft:(CDVInvokedUrlCommand*)command
+- (void) doWithWft:(CDVInvokedUrlCommand*)command
 {
     // 提取订单json字符串
     NSString *callbackId = command.callbackId;

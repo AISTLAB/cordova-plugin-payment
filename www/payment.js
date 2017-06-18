@@ -11,9 +11,9 @@ var payment = {
         cordova.exec(
             succCallback,
             errorCallback,
-             "PaymentPlugin",
-             action,
-             args
+            "PaymentPlugin",
+            action,
+            [args]
         )
     }
 }
