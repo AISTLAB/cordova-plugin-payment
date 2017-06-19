@@ -3,13 +3,13 @@
 #import <Cordova/CDV.h>
 #import "SPayClient.h"
 
-@interface Payment : CDVPlugin {
+@interface PaymentPlugin : CDVPlugin {
   // Member variables go here.
 }
-- (void) coolMethod:(CDVInvokedUrlCommand*)command;
+- (void) doWithWft:(CDVInvokedUrlCommand*)command;
 @end
 
-@implementation Payment
+@implementation PaymentPlugin
 
 - (instancetype)init
 {

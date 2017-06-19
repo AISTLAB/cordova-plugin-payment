@@ -42,8 +42,8 @@
     <!-- ios -->
     <platform name="ios">
         <config-file parent="/*" target="config.xml">
-            <feature name="payment">
-                <param name="ios-package" value="payment"/>
+            <feature name="PaymentPlugin">
+                <param name="ios-package" value="PaymentPlugin"/>
             </feature>
         </config-file>
         <config-file target="*-Info.plist" parent="CFBundleURLTypes">
@@ -94,6 +94,6 @@
         <source-file src="libs/ios/wft/libSPaySDK.a" framework="true"/>
 
         <!-- source code -->
-        <source-file src="src/ios/Payment.m"/>
+        <source-file src="src/ios/PaymentPlugin.m"/>
     </platform>
 </plugin>
